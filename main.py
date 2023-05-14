@@ -77,6 +77,13 @@ async def read_root():
 # cargo mi dataset
 df = pd.read_csv('data_limpia.csv')
 
+
+# convertir la columna "release_date" al tipo de datos datetime
+df["release_date"] = pd.to_datetime(df["release_date"], format="%Y-%m-%d")
+
+# crear la columna "day_of_week" con el número del día de la semana (de 0 a 6)
+df["day_of_week"] = df["release_date"].dt.dayofweek
+df['release_month'] = pd.to_datetime(df['release_date']).dt.month
 # creo un diccionario para utilizarlo en la funcion de Mes para que puedan ser consultadas las cantidades en español o en ingles
 meses = {
     "enero": "01",
@@ -105,6 +112,8 @@ meses = {
     "december": "12"
 }
 
+
+
 # Creo la funcion que me devuelve la cantidad de peliculas por mes
 @app.get("/peliculas_mes/{Mes/Month}")
 async def peliculas_mes(Mes_month: str):
@@ -117,19 +126,58 @@ async def peliculas_mes(Mes_month: str):
     return {"Mes": Mes_month.title(), "Cantidad": cantidad}
     
 
-# Creo la funcion que me devuleve la cantidad de peliculas por dia
+# Creo la funcion que me devuleve la cantidad de peliculas por mes y dia
+month_dict = {
+    "enero": 1, "january": 1,
+    "febrero": 2, "february": 2,
+    "marzo": 3, "march": 3,
+    "abril": 4, "april": 4,
+    "mayo": 5, "may": 5,
+    "junio": 6, "june": 6,
+    "julio": 7, "july": 7,
+    "agosto": 8, "august": 8,
+    "septiembre": 9, "september": 9,
+    "octubre": 10, "october": 10,
+    "noviembre": 11, "november": 11,
+    "diciembre": 12, "december": 12
+}
 
-@app.get("/peliculas_dia/{dia}")
-async def peliculas_dia(dia: str):
-    try:
-        dia_num = int(dia)
-    except ValueError:
-        return {"error": f"El día '{dia}' no es válido. Por favor, ingrese un número de día válido (1-31)."}
-    if dia_num < 1 or dia_num > 31:
-        return {"error": f"El día '{dia}' no es válido. Por favor, ingrese un número de día válido (1-31)."}
-    df_dia = df[df["release_date"].str.endswith(f"-{dia_num:02d}")]
-    cantidad = len(df_dia)
-    return {"Dia": dia, "Cantidad": cantidad}
+day_dict = {
+    "monday": 0,
+    "lunes": 0,
+    "tuesday": 1,
+    "martes": 1,
+    "wednesday": 2,
+    "miercoles": 2,
+    "thursday": 3,
+    "jueves": 3,
+    "friday": 4,
+    "viernes": 4,
+    "saturday": 5,
+    "sabado": 5,
+    "sunday": 6,
+    "domingo": 6
+}
+
+
+def get_movie_count(month: str, day: str) -> int:
+    month_num = month_dict.get(month.lower(), None)
+    if month_num is None:
+        return 0
+    
+    day_name = day_dict.get(day.lower(), None)
+    if day_name is None:
+        return 0
+    
+    mask = (df["release_month"] == month_num) & (df["day_of_week"] == day_name)
+    filtered_df = df[mask]
+    
+    return len(filtered_df)
+
+@app.get("/Peliculas/{month}/{day}")
+async def count_movies(month: str, day: str):
+    count = get_movie_count(month, day)
+    return {"count": count}
 
 # Creo la funcion franquicia que me retorna la cantidad de peliculas, las ganancias totales y la ganancia promedio
 @app.get("/franquicia/{franquicia}")
@@ -172,4 +220,5 @@ async def Recomendacion(movie_title: str):
     recommended_movies =get_similar_movies(movie_title)
     
     return {"Recommended Movies": recommended_movies}
+
 
