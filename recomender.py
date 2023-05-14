@@ -6,8 +6,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 df = pd.read_csv('Data_ML.csv')
 
 # Seleccionar las columnas relevantes
-df = df[['original_title', 'overview', 'genres_name']]
+df = df[['original_title', 'overview', 'genres_name', 'popularity']]
 df = df.dropna()
+df = df.sort_values('popularity', ascending=False).iloc[:43000]
 df.reset_index(inplace=True, drop=True)
 
 # Limpiar el texto y los géneros
