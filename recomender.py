@@ -8,7 +8,7 @@ df = pd.read_csv('Data_ML.csv')
 # Seleccionar las columnas relevantes
 df = df[['original_title', 'overview', 'genres_name', 'popularity']]
 df = df.dropna()
-df = df.sort_values('popularity', ascending=False).iloc[:6900]
+df = df.sort_values('popularity', ascending=False).iloc[:6500]
 df.reset_index(inplace=True, drop=True)
 
 # Limpiar el texto y los géneros
