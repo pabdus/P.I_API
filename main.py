@@ -112,10 +112,7 @@ meses = {
     "december": "12"
 }
 
-
-
-# Creo la funcion que me devuelve la cantidad de peliculas por mes
-@app.get("/peliculas_mes/{Mes}")
+@app.get("/peliculas_mes/{Mes}/")
 async def peliculas_mes(Mes: str):
     try:
         mes_num = meses[Mes.lower()]
