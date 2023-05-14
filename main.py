@@ -87,29 +87,49 @@ df['release_month'] = pd.to_datetime(df['release_date']).dt.month
 
 # creo un diccionario para utilizarlo en la funcion de Mes para que puedan ser consultadas las cantidades en español o en ingles
 meses = {
-    "enero": 1, "january": 1,
-    "febrero": 2, "february": 2,
-    "marzo": 3, "march": 3,
-    "abril": 4, "april": 4,
-    "mayo": 5, "may": 5,
-    "junio": 6, "june": 6,
-    "julio": 7, "july": 7,
-    "agosto": 8, "august": 8,
-    "septiembre": 9, "september": 9,
-    "octubre": 10, "october": 10,
-    "noviembre": 11, "november": 11,
-    "diciembre": 12, "december": 12
+    "enero": 1,
+    "febrero": 2,
+    "marzo": 3,
+    "abril": 4,
+    "mayo": 5,
+    "junio": 6,
+    "julio": 7,
+    "agosto": 8,
+    "septiembre": 9,
+    "octubre": 10,
+    "noviembre": 11,
+    "diciembre": 12,
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "april": 4,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "september": 9,
+    "october": 10,
+    "november": 11,
+    "december": 12
 }
 
 # Creo la funcion que me devuelve la cantidad de peliculas por mes
+
 @app.get("/peliculas_mes/{Mes_month}")
+
 async def peliculas_mes(Mes_month: str):
+
     try:
-        mes_num = meses[Mes_month.lower()]
+        mes_num = meses.get(Mes_month.lower(), None)
+        if mes_num is None:
+            raise KeyError()
     except KeyError:
         return {"error": f"El mes '{Mes_month}' no es válido. Por favor, ingrese un mes válido en español o inglés."}
-    df_mes = df[df["release_date"].str.contains(f"-{mes_num}-")]
+    
+    df["release_month"] = pd.DatetimeIndex(df["release_date"]).month
+    df_mes = df[df["release_month"] == mes_num]
     cantidad = len(df_mes)
+
     return {"Mes": Mes_month.title(), "Cantidad": cantidad}
     
 
