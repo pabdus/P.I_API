@@ -115,15 +115,14 @@ meses = {
 
 
 # Creo la funcion que me devuelve la cantidad de peliculas por mes
-@app.get("/peliculas_mes/{Mes}")
-async def peliculas_mes(Mes_month: str):
+async def peliculas_mes(Mes: str):
     try:
-        mes_num = meses[Mes_month.lower()]
+        mes_num = meses[Mes.lower()]
     except KeyError:
-        return {"error": f"El mes '{Mes_month}' no es válido. Por favor, ingrese un mes válido en español o inglés."}
+        return {"error": f"El mes '{Mes}' no es válido. Por favor, ingrese un mes válido en español o inglés."}
     df_mes = df[df["release_date"].str.contains(f"-{mes_num}-")]
     cantidad = len(df_mes)
-    return {"Mes": Mes_month.title(), "Cantidad": cantidad}
+    return {"Mes": Mes.title(), "Cantidad": cantidad}
     
 
 # Creo la funcion que me devuleve la cantidad de peliculas por mes y dia
