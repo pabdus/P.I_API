@@ -30,30 +30,33 @@ Deben crear 6 funciones para los endpoints que se consumirán en la API.
 
 
 # ETL
-Para poder realizar el análisis de las películas, se realizó un proceso de ETL (Extracción, Transformación y Carga) con los siguientes pasos:
+Para poder realizar el análisis de las películas, se realizó un **[proceso de ETL](https://github.com/pabdus/P.I_API/blob/main/Procesos/ETL.ipynb)** (Extracción, Transformación y Carga) con los siguientes pasos:
 
-Extracción: se obtuvo el dataset de películas desde [movies_dataset.csv](https://drive.google.com/file/d/1Rp7SNuoRnmdoQMa5LWXuK4i7W1ILblYb/view?usp=sharing).
-Transformación: se eliminaron columnas innecesarias, se convirtieron los tipos de datos a los adecuados y se eliminaron filas con datos faltantes.
+**Extracción**: se obtuvo el dataset de películas desde **[movies_dataset.csv](https://drive.google.com/file/d/1Rp7SNuoRnmdoQMa5LWXuK4i7W1ILblYb/view?usp=sharing)**.
+
+**Transformación**: se eliminaron columnas innecesarias, se convirtieron los tipos de datos a los adecuados y se eliminaron filas con datos faltantes.
 Carga: se cargó el dataset limpio en un DataFrame de pandas para su posterior análisis.
+
 # EDA
-Una vez cargado el dataset, se procedió a realizar un análisis exploratorio de datos (EDA). Este proceso incluyó la creación de visualizaciones para poder entender mejor los datos, así como la realización de una nube de palabras para ver las palabras que se repetían con mayor frecuencia en el título de las películas.
+Una vez cargado el dataset, se procedió a realizar un **[análisis exploratorio de datos (EDA)](https://github.com/pabdus/P.I_API/blob/main/Procesos/EDA.ipynb)**. Este proceso incluyó la creación de visualizaciones para poder entender mejor los datos, así como la realización de una nube de palabras para ver las palabras que se repetían con mayor frecuencia en el título de las películas.
 
 # Machine Learning - Sistema de recomendación
-Para poder generar un sistema de recomendación de películas, se utilizó el algoritmo de similitud coseno. Este algoritmo se basa en la similitud entre dos vectores, en este caso, los vectores corresponden a las películas.
+Para poder generar un **[sistema de recomendación de películas](https://github.com/pabdus/P.I_API/blob/main/recomender.py)**, se utilizó el algoritmo de similitud coseno. Este algoritmo se basa en la similitud entre dos vectores, en este caso, los vectores corresponden a las películas.
 
 ## El proceso para generar el sistema de recomendación fue el siguiente:
 
-Se creó una matriz de similitud utilizando el algoritmo de similitud coseno.
+Se creó una matriz de similitud utilizando el algoritmo de **[similitud coseno](s.wikipedia.org/wiki/Similitud_coseno#:~:text=La%20similitud%20coseno%20es%20una,del%20ángulo%20comprendido%20entre%20ellos.)**.
 Se utilizó esta matriz para generar una lista de películas recomendadas para cada película en el dataset.
-Se creó una API utilizando la librería FastAPI para poder consumir los datos y obtener recomendaciones de películas.
-Uso de la API
-## Para utilizar la API, se pueden seguir los siguientes pasos:
 
-Clonar el repositorio desde GitHub.
-Instalar las dependencias necesarias.
-Correr la aplicación.
-Consumir los endpoints para obtener recomendaciones de películas.
-En resumen, este proyecto tiene como objetivo analizar un dataset de películas y generar un sistema de recomendación de películas utilizando el algoritmo de similitud coseno. Todo esto se ha implementado en una API utilizando la librería FastAPI para poder acceder a las recomendaciones desde cualquier lugar.
+## API
+
+
+Se creó una API utilizando la librería FastAPI para poder consumir los datos y obtener recomendaciones de películas.
+
+## Para utilizar la API, se puede acceder desde el siguiente link:
+
+**[API CONSUMIBLE](https://api-movies-project1.onrender.com/)**
+
 
 ![](https://user-images.githubusercontent.com/112780608/238518451-eeb6d6f8-8edc-4a98-a7f3-ca1930095536.png)
 
