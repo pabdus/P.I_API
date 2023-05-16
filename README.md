@@ -1,3 +1,5 @@
+(https://user-images.githubusercontent.com/112780608/238518446-91bc87a4-acc2-43d6-a80d-0ee51b785589.png)
+
 # Proyecto de Data Science - Análisis de películas
 Descripción del proyecto
 Este proyecto tiene como objetivo analizar un dataset de películas para poder generar un sistema de recomendación de películas utilizando el algoritmo de similitud coseno.
