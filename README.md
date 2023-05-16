@@ -23,31 +23,16 @@ Crear la columna con el retorno de inversión, llamada return con los campos rev
 Eliminar las columnas que no serán utilizadas, video,imdb_id,adult,original_title,vote_count,poster_path y homepage.
 
 
-Desarrollo API: Propones disponibilizar los datos de la empresa usando el framework FastAPI. Las consultas que propones son las siguientes:
+Desarrollo API: Propones disponibilizar los datos de la empresa usando el framework FastAPI.
 
-Deben crear 6 funciones para los endpoints que se consumirán en la API, recuerden que deben tener un decorador por cada una (@app.get(‘/’)).
-
-def peliculas_mes(mes): '''Se ingresa el mes y la funcion retorna la cantidad de peliculas que se estrenaron ese mes (nombre del mes, en str, ejemplo 'enero') historicamente''' return {'mes':mes, 'cantidad':respuesta}
-
-def peliculas_dia(dia): '''Se ingresa el dia y la funcion retorna la cantidad de peliculas que se estrenaron ese dia (de la semana, en str, ejemplo 'lunes') historicamente''' return {'dia':dia, 'cantidad':respuesta}
-
-def franquicia(franquicia): '''Se ingresa la franquicia, retornando la cantidad de peliculas, ganancia total y promedio''' return {'franquicia':franquicia, 'cantidad':respuesta, 'ganancia_total':respuesta, 'ganancia_promedio':respuesta}
-
-def peliculas_pais(pais): '''Ingresas el pais, retornando la cantidad de peliculas producidas en el mismo''' return {'pais':pais, 'cantidad':respuesta}
-
-def productoras(productora): '''Ingresas la productora, retornando la ganancia total y la cantidad de peliculas que produjeron''' return {'productora':productora, 'ganancia_total':respuesta, 'cantidad':respuesta}
-
-def retorno(pelicula): '''Ingresas la pelicula, retornando la inversion, la ganancia, el retorno y el año en el que se lanzo''' return {'pelicula':pelicula, 'inversion':respuesta, 'ganacia':respuesta,'retorno':respuesta, 'anio':respuesta}
-
-
-Deployment: Conoces sobre Render y tienes un tutorial de Render que te hace la vida mas facil 😄 . Tambien podrias usar Railway, o cualquier otro servicio que permita que la API pueda ser consumida desde la web.
+Deben crear 6 funciones para los endpoints que se consumirán en la API.
 
 
 
 # ETL
 Para poder realizar el análisis de las películas, se realizó un proceso de ETL (Extracción, Transformación y Carga) con los siguientes pasos:
 
-Extracción: se obtuvo el dataset de películas desde [fuente de datos].
+Extracción: se obtuvo el dataset de películas desde [movies_dataset.csv](https://drive.google.com/file/d/1Rp7SNuoRnmdoQMa5LWXuK4i7W1ILblYb/view?usp=sharing).
 Transformación: se eliminaron columnas innecesarias, se convirtieron los tipos de datos a los adecuados y se eliminaron filas con datos faltantes.
 Carga: se cargó el dataset limpio en un DataFrame de pandas para su posterior análisis.
 # EDA
