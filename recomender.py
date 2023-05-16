@@ -12,9 +12,8 @@ df = df.sort_values('popularity', ascending=False).iloc[:5500]
 df.reset_index(inplace=True, drop=True)
 
 # Limpiar el texto y los géneros
-df['overview'] = df['overview'].fillna('')
+
 df['overview'] = df['overview'].apply(lambda x: x.lower())
-df['genres_name'] = df['genres_name'].fillna('')
 df['genres_name'] = df['genres_name'].apply(lambda x: x.lower())
 
 # Combinar las columnas de texto y géneros en una sola columna
