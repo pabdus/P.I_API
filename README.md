@@ -29,3 +29,6 @@ Instalar las dependencias necesarias.
 Correr la aplicación.
 Consumir los endpoints para obtener recomendaciones de películas.
 En resumen, este proyecto tiene como objetivo analizar un dataset de películas y generar un sistema de recomendación de películas utilizando el algoritmo de similitud coseno. Todo esto se ha implementado en una API utilizando la librería FastAPI para poder acceder a las recomendaciones desde cualquier lugar.
+
+![] (https://user-images.githubusercontent.com/112780608/238518451-eeb6d6f8-8edc-4a98-a7f3-ca1930095536.png)
+
