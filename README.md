@@ -51,7 +51,7 @@ Se utilizó esta matriz para generar una lista de películas recomendadas para c
 ## API
 
 
-Se creó una API utilizando la librería FastAPI para poder consumir los datos y obtener recomendaciones de películas.
+Se creó una API utilizando la librería FastAPI para poder consumir los datos y obtener recomendaciones de películas. **[Codigo API](https://github.com/pabdus/P.I_API/blob/main/main.py)**
 
 ## Para utilizar la API, se puede acceder desde el siguiente link:
 
