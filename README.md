@@ -8,7 +8,7 @@ Este proyecto tiene como objetivo  realizar un proceso de ETL y EDA a un dataset
 
 # Solicitudes del Proyecto
 
-Transformaciones:
+**Transformaciones:**
 
 Algunos campos, como belongs_to_collection, production_companies y otros (ver diccionario de datos) están anidados, esto es o bien tienen un diccionario o una lista como valores en cada fila, ¡deberán desanidarlos para poder y unirlos al dataset de nuevo hacer alguna de las consultas de la API! O bien buscar la manera de acceder a esos datos sin desanidarlos.
 
