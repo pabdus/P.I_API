@@ -1,7 +1,7 @@
 
 
 # Proyecto de Data Science 1 - HENRY. Proyecto Individual 
-                              ![](https://user-images.githubusercontent.com/112780608/238518446-91bc87a4-acc2-43d6-a80d-0ee51b785589.png)
+![](https://user-images.githubusercontent.com/112780608/238518446-91bc87a4-acc2-43d6-a80d-0ee51b785589.png)
 
 ## Descripción del proyecto
 Este proyecto tiene como objetivo  realizar un proceso de ETL y EDA a un dataset de películas para poder generar un sistema de recomendación de películas.
