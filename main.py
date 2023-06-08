@@ -1,13 +1,13 @@
 # Importo las librerias necesarias para la API de consultas
-
 from sklearn.feature_extraction.text import TfidfVectorizer
 from fastapi import FastAPI
 from recomender import get_similar_movies
 import pandas as pd
 from fastapi.responses import HTMLResponse
+import calendar
 
 # Instancio la API y le doy un titulo, una descripcion y un numero de version
-app = FastAPI(title = "Proyecto Individual", description="Data 10", version= "1.0.1")
+app = FastAPI(title="Proyecto Individual", description="Data 10", version="1.0.1")
 
 # Definimos un template HTML para nuestro index
 template = """
@@ -73,153 +73,146 @@ template = """
 async def read_root():
     return template
 
-
 # cargo mi dataset
 df = pd.read_csv('data_limpia.csv')
 
-
-# convertir la columna "release_date" al tipo de datos datetime
-df["release_date"] = pd.to_datetime(df["release_date"], format="%Y-%m-%d")
-
-# crear la columna "day_of_week" con el número del día de la semana (de 0 a 6)
-df["day_of_week"] = df["release_date"].dt.dayofweek
-df['release_month'] = pd.to_datetime(df['release_date']).dt.month
-
 # creo un diccionario para utilizarlo en la funcion de Mes para que puedan ser consultadas las cantidades en español o en ingles
 meses = {
-    "enero": 1,
-    "febrero": 2,
-    "marzo": 3,
-    "abril": 4,
-    "mayo": 5,
-    "junio": 6,
-    "julio": 7,
-    "agosto": 8,
-    "septiembre": 9,
-    "octubre": 10,
-    "noviembre": 11,
-    "diciembre": 12,
-    "january": 1,
-    "february": 2,
-    "march": 3,
-    "april": 4,
-    "may": 5,
-    "june": 6,
-    "july": 7,
-    "august": 8,
-    "september": 9,
-    "october": 10,
-    "november": 11,
-    "december": 12
+    "enero": "01",
+    "febrero": "02",
+    "marzo": "03",
+    "abril": "04",
+    "mayo": "05",
+    "junio": "06",
+    "julio": "07",
+    "agosto": "08",
+    "septiembre": "09",
+    "octubre": "10",
+    "noviembre": "11",
+    "diciembre": "12",
+    "january": "01",
+    "february": "02",
+    "march": "03",
+    "april": "04",
+    "may": "05",
+    "june": "06",
+    "july": "07",
+    "august": "08",
+    "september": "09",
+    "october": "10",
+    "november": "11",
+    "december": "12"
 }
 
 # Creo la funcion que me devuelve la cantidad de peliculas por mes
-
-@app.get("/peliculas_mes/{Mes_month}")
-
-async def peliculas_mes(Mes_month: str):
-
+@app.get("/peliculas_mes/{mes}")
+async def peliculas_mes(mes: str):
     try:
-        mes_num = meses.get(Mes_month.lower(), None)
-        if mes_num is None:
-            raise KeyError()
+        mes_num = meses[mes.lower()]
     except KeyError:
-        return {"error": f"El mes '{Mes_month}' no es válido. Por favor, ingrese un mes válido en español o inglés."}
-    
-    df["release_month"] = pd.DatetimeIndex(df["release_date"]).month
-    df_mes = df[df["release_month"] == mes_num]
+        return {"error": f"El mes '{mes}' no es válido. Por favor, ingrese un mes válido en español o inglés."}
+    df_mes = df[df["release_date"].str.contains(f"-{mes_num}-")]
     cantidad = len(df_mes)
-
-    return {"Mes": Mes_month.title(), "Cantidad": cantidad}
+    return {"Mes": mes.title(), "Cantidad": cantidad}
     
 
-# Creo la funcion que me devuleve la cantidad de peliculas por mes y dia
-month_dict = {
-    "enero": 1, "january": 1,
-    "febrero": 2, "february": 2,
-    "marzo": 3, "march": 3,
-    "abril": 4, "april": 4,
-    "mayo": 5, "may": 5,
-    "junio": 6, "june": 6,
-    "julio": 7, "july": 7,
-    "agosto": 8, "august": 8,
-    "septiembre": 9, "september": 9,
-    "octubre": 10, "october": 10,
-    "noviembre": 11, "november": 11,
-    "diciembre": 12, "december": 12
+# Creo la funcion que me devuleve la cantidad de peliculas por dia
+
+dias_semana = {
+    'lunes': 'Monday',
+    'martes': 'Tuesday',
+    'miercoles': 'Wednesday',
+    'jueves': 'Thursday',
+    'viernes': 'Friday',
+    'sabado': 'Saturday',
+    'domingo': 'Sunday'
 }
 
-day_dict = {
-    "monday": 0,
-    "lunes": 0,
-    "tuesday": 1,
-    "martes": 1,
-    "wednesday": 2,
-    "miercoles": 2,
-    "thursday": 3,
-    "jueves": 3,
-    "friday": 4,
-    "viernes": 4,
-    "saturday": 5,
-    "sabado": 5,
-    "sunday": 6,
-    "domingo": 6
-}
-
-
-def get_movie_count(month: str, day: str) -> int:
-    month_num = month_dict.get(month.lower(), None)
-    if month_num is None:
-        return 0
+@app.get("/peliculas_dia/{dia}")
+async def peliculas_dia(dia: str):
+    dia = dia.lower()
+    if dia not in dias_semana:
+        return {"error": f"El día '{dia}' no es válido. Por favor, ingrese un día válido en español."}
     
-    day_name = day_dict.get(day.lower(), None)
-    if day_name is None:
-        return 0
+    dia_ingles = dias_semana[dia]
+    df_dia = df[df['release_day'] == dia_ingles]
+    cantidad = len(df_dia)
     
-    mask = (df["release_month"] == month_num) & (df["day_of_week"] == day_name)
-    filtered_df = df[mask]
+    return {"Cantidad": cantidad, "Dia": dia.capitalize()}
+
+# funcion score
+
+@app.get("/score_titulo/{titulo_de_la_filmacion}")
+async def score_titulo(titulo_de_la_filmacion: str):
+    pelicula = df[df['title'].str.lower() == titulo_de_la_filmacion.lower()]
+    if pelicula.empty:
+        return {'mensaje': 'No se encontró la película'}
+    else:
+        titulo = pelicula['title'].values[0]
+        año_estreno = pelicula['release_year'].values[0]
+        score = pelicula['popularity'].values[0]
+        return {'titulo': str(titulo), 'año_estreno': str(año_estreno), 'score': str(score)}
+
+# funcion votos
+@app.get("/votos_titulo/{titulo_de_la_filmacion}")
+async def votos_titulo(titulo_de_la_filmacion: str):
+    pelicula = df[df['title'].str.lower() == titulo_de_la_filmacion.lower()]
+    if pelicula.empty:
+        return {'mensaje': 'No se encontró la película'}
+    else:
+        votos = pelicula['vote_count'].values[0]
+        promedio = pelicula['vote_average'].values[0]
+        if votos >= 2000:
+            titulo = pelicula['title'].values[0]
+            año_estreno = pelicula['release_year'].values[0]
+            return {'titulo': str(titulo), 'año_estreno': str(año_estreno), 'votos': str(votos), 'promedio': str(promedio)}
+        else:
+            return {'mensaje': 'La película no cumple con el requisito de tener al menos 2000 valoraciones'}
+
+@app.get("/get_actor/{nombre_actor}")
+async def get_actor(nombre_actor: str):
+    df['actores'] = df['actores'].apply(lambda actores: eval(actores) if isinstance(actores, str) else actores)
+    actor_films = df[df['actores'].apply(lambda actores: isinstance(actores, list) and any(nombre_actor.lower() in a.lower() for a in actores))]
+
+    if actor_films.empty:
+        return {'mensaje': 'No se encontró al actor en ninguna filmación'}
+    else:
+        cantidad_films = len(actor_films)
+        retorno_total = actor_films['revenue'].sum()
+        promedio_retorno = round(actor_films['revenue'].mean(),2)
+        return {
+            'actor': nombre_actor,
+            'cantidad_films': cantidad_films,
+            'retorno_total': retorno_total,
+            'promedio_retorno': promedio_retorno
+        }
     
-    return len(filtered_df)
+@app.get("/get_director/{nombre_director}")
+async def get_director(nombre_director: str):
+    director_films = df[df['director'].str.lower() == nombre_director.lower()]
 
-@app.get("/Peliculas/{month}/{day}")
-async def count_movies(month: str, day: str):
-    count = get_movie_count(month, day)
-    return {"count": count}
+    if director_films.empty:
+        return {'mensaje': 'No se encontró al director en ninguna filmación'}
+    else:
+        nombre_peliculas = director_films['title'].tolist()
+        fechas_lanzamiento = director_films['release_date'].tolist()
+        retornos_individuales = director_films['return'].tolist()
+        costos = director_films['budget'].tolist()
+        ganancias = director_films['revenue'].tolist()
 
-# Creo la funcion franquicia que me retorna la cantidad de peliculas, las ganancias totales y la ganancia promedio
-
-@app.get("/franquicia/{franquicia}")
-async def info_franquicia(franquicia: str):
-    try:
-        df_franquicia = df[df["belongs_to_collection_name"].str.lower() == franquicia.lower()]
-    except:
-        respuesta = {"franquicia": franquicia.capitalize(), "cantidad": 0, "ganancia_total": 0, "ganancia_promedio": 0}
-        return respuesta
-        
-    cantidad = len(df_franquicia)
-    ganancia_total = df_franquicia["revenue"].sum()
-    ganancia_promedio = df_franquicia["revenue"].mean()
-    
-    respuesta = {"Franquicia": franquicia.capitalize(), "Cantidad": cantidad, "Ganancia total": ganancia_total, "Ganancia Promedio": ganancia_promedio}
-    return respuesta
-    
-
-
-# Función que retorna la cantidad de peliculas por pais
-@app.get("/peliculas_pais/{pais}")
-async def peliculas_pais(pais: str):
-    df_pais = df[df["production_countries_name"] == pais.lower()]
-    cantidad = len(df_pais)
-    return {"Pais": pais.capitalize(), "Cantidad": cantidad}
-
-# Funcion que retorna en nombre de la productora la ganancia total y la cantidad
-@app.get("/productoras/{productora}")
-async def productoras(productora: str):
-    df_productora = df[df["production_companies_name"].str.lower().str.contains(productora.lower())]
-    ganancia_total = df_productora["revenue"].sum()
-    cantidad = len(df_productora)
-    return {"Productora": productora.capitalize(), "Ganancia Total": ganancia_total, "Cantidad": cantidad}
-
+        return {
+            'director': nombre_director,
+            'peliculas': [
+                {
+                    'nombre_pelicula': nombre,
+                    'fecha_lanzamiento': fecha,
+                    'retorno_individual': retorno,
+                    'costo': costo,
+                    'ganancia': ganancia
+                }
+                for nombre, fecha, retorno, costo, ganancia in zip(nombre_peliculas, fechas_lanzamiento, retornos_individuales, costos, ganancias)
+            ]
+        }
 
 #Funcion que llama al modelo de ML
 @app.get("/recomendacion")
