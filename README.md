@@ -55,7 +55,7 @@ Se creó una API utilizando la librería FastAPI para poder consumir los datos y
 
 ## Para utilizar la API, se puede acceder desde el siguiente link:
 
-**[API CONSUMIBLE](https://api-movies-project1.onrender.com/)**
+**[API CONSUMIBLE](https://my-api-movies.onrender.com/)**
 
 
 ![](https://user-images.githubusercontent.com/112780608/238518451-eeb6d6f8-8edc-4a98-a7f3-ca1930095536.png)
