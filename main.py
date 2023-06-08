@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from recomender import get_similar_movies
 import pandas as pd
 from fastapi.responses import HTMLResponse
-import calendar
+
 
 # Instancio la API y le doy un titulo, una descripcion y un numero de version
 app = FastAPI(title="Proyecto Individual", description="Data 10", version="1.0.1")
